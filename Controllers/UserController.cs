@@ -11,6 +11,8 @@ using System.Text;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authorization;
+using System.Net.Mail;
+using System.Net;
 
 namespace IS_ZJZ_B.Controllers
 {
@@ -122,6 +124,7 @@ namespace IS_ZJZ_B.Controllers
 
             userObj.pwd= PasswordHasher.HashPassword(userObj.pwd);
             userObj.status = "načekanju";
+            userObj.Role = "user";
             userObj.Token = "";
            // if(string.IsNullOrEmpty(userObj.email))
            await _authContext.Users.AddAsync(userObj);
@@ -132,6 +135,26 @@ namespace IS_ZJZ_B.Controllers
             });
         }
 
+       /* [HttpPost("registera")]
+
+        public async Task<IActionResult> RegisterAdmin([FromBody] Admin userObj)
+        {
+            if (userObj == null)
+                return BadRequest();
+          
+
+            userObj.pwd = PasswordHasher.HashPassword(userObj.pwd);
+            userObj.Role = "admin";
+            userObj.Token = "";
+            // if(string.IsNullOrEmpty(userObj.email))
+            await _authContext.Admin.AddAsync(userObj);
+            await _authContext.SaveChangesAsync();
+            return Ok(new
+            {
+                Message = "Uspešno ste se registrovali!"
+            });
+        }
+       */
         private Task<bool> CheckEmailExistAsync( string email) 
             =>_authContext.Users.AnyAsync(x => x.email == email);
         private Task<bool> CheckJmbgExistAsync(string jmbg)
@@ -143,8 +166,10 @@ namespace IS_ZJZ_B.Controllers
             var jwtTokenhandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes("veryverysceret.....");
             var identity = new ClaimsIdentity(new Claim[]
-            {   
-                new Claim(ClaimTypes.Name, $"{user.firstName}{user.lastName}")
+            {
+                new Claim(ClaimTypes.Name, user.id.ToString()),
+                new Claim(ClaimTypes.Role, $"{user.Role}"),
+                new Claim(ClaimTypes.Name, $"{user.firstName} {user.lastName}")
             });
 
             var credentials= new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature );
@@ -163,7 +188,10 @@ namespace IS_ZJZ_B.Controllers
             var key = Encoding.ASCII.GetBytes("veryverysceret.....");
             var identity = new ClaimsIdentity(new Claim[]
             {
-                new Claim(ClaimTypes.Name, $"{user.firstName}{user.lastName}")
+
+                new Claim(ClaimTypes.Name, user.id.ToString()),
+                new Claim(ClaimTypes.Role, $"{user.Role}"),
+                new Claim(ClaimTypes.Name, $"{user.firstName} {user.lastName}")
             });
 
             var credentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature);
@@ -182,6 +210,7 @@ namespace IS_ZJZ_B.Controllers
             var key = Encoding.ASCII.GetBytes("veryverysceret.....");
             var identity = new ClaimsIdentity(new Claim[]
             {
+                new Claim(ClaimTypes.Role, $"{user.Role}"),
                 new Claim(ClaimTypes.Name, $"{user.email}")
             });
 
@@ -197,11 +226,87 @@ namespace IS_ZJZ_B.Controllers
         }
         [Authorize] ///da zastiti  api
         [HttpGet]
-        public async Task<ActionResult<User>> GetAllUsers()
+        public async Task<IEnumerable<User>> GetRegisterUsers()
         {
-            return Ok(
-                await _authContext.Users.ToListAsync()
-                );
+            return await _authContext.Users.Where(x => x.status == "načekanju").ToListAsync();
         }
-    }
+        [Authorize]
+        [HttpGet]
+        [Route("getallusers")]
+
+        public async Task<IEnumerable<User>> GetAllUsers()
+        {
+            return await _authContext.Users.Where(x => x.status == "odobreno").ToListAsync();
+        }
+
+        [Authorize]
+        [HttpDelete("{id}")]
+
+        public async Task<IActionResult> DeleteUsers(int id)
+        {
+            var user = await _authContext.Users.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            string to = user.email;
+            string from = "infromacionitest@gmail.com";
+            MailMessage message = new MailMessage(from, to);
+            string mailBody = $"Zdravo {user.firstName}, <br>" + Environment.NewLine + $"Administrator vam nije odobrio zahtev!";
+            message.Body = mailBody;
+            message.BodyEncoding = Encoding.UTF8;
+            message.IsBodyHtml = true;
+            SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
+            NetworkCredential networkCredential = new NetworkCredential("infromacionitest@gmail.com", "owgnxtbvgswezkxi");
+            client.EnableSsl = true;
+            client.UseDefaultCredentials = false;
+            client.Credentials = networkCredential;
+            try
+            {
+                client.Send(message);
+            }
+            catch (Exception ex) { throw ex; }
+            _authContext.Users.Remove(user);
+            await _authContext.SaveChangesAsync();
+
+            return NoContent();
+
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutUsers(int id, User ur)
+        {
+            var user = await _authContext.Users.FindAsync(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            user.status = ur.status;
+
+            string to = user.email;
+            string from = "infromacionitest@gmail.com";
+            MailMessage message = new MailMessage(from, to);
+            string mailBody = $"Hi {user.firstName}, <br>" + Environment.NewLine + $"Vas zahtev za registraciju je prihvacen !" + " <br> " + Environment.NewLine + $"Loguj te ste http://localhost:4200/registeruser ";
+            message.Body = mailBody;
+            message.BodyEncoding = Encoding.UTF8;
+            message.IsBodyHtml = true;
+            SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
+            NetworkCredential networkCredential = new NetworkCredential("infromacionitest@gmail.com", "owgnxtbvgswezkxi");
+            client.EnableSsl = true;
+            client.UseDefaultCredentials = false;
+            client.Credentials = networkCredential;
+            try
+            {
+                client.Send(message);
+            }
+            catch (Exception ex) { throw ex; }
+            await _authContext.SaveChangesAsync();
+
+            return Ok(user);
+        }
+
+}
 }

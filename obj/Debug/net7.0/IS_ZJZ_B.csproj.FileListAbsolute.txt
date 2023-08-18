@@ -75,3 +75,4 @@ C:\Users\PC\OneDrive\Radna površina\IS_ZJZ\ZZJZ_B\IS_ZJZ_B\IS_ZJZ_B\obj\Debug\n
 C:\Users\PC\OneDrive\Radna površina\IS_ZJZ\ZZJZ_B\IS_ZJZ_B\IS_ZJZ_B\obj\Debug\net7.0\IS_ZJZ_B.pdb
 C:\Users\PC\OneDrive\Radna površina\IS_ZJZ\ZZJZ_B\IS_ZJZ_B\IS_ZJZ_B\obj\Debug\net7.0\IS_ZJZ_B.genruntimeconfig.cache
 C:\Users\PC\OneDrive\Radna površina\IS_ZJZ\ZZJZ_B\IS_ZJZ_B\IS_ZJZ_B\obj\Debug\net7.0\ref\IS_ZJZ_B.dll
+C:\Users\PC\OneDrive\Radna površina\IS_ZJZ\ZZJZ_B\IS_ZJZ_B\IS_ZJZ_B\bin\Debug\net7.0\IS_ZJZ_B.staticwebassets.runtime.json

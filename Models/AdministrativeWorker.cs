@@ -10,6 +10,7 @@ namespace IS_ZJZ_B.Models
         public string lastName { get; set; }
         public string email { get; set; }
         public string pwd { get; set; }
+        public string Role { get; set; }
         public string Token { get; set; }
 
     }

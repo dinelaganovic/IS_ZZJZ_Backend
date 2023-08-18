@@ -11,8 +11,11 @@ namespace IS_ZJZ_B.Context
 
         }
         public DbSet<User> Users { get; set; }
+        public DbSet<healthcards> Healthcards { get; set; }
         public DbSet<AdministrativeWorker> Administrativeworkers { get; set; }
         public DbSet<Admin> Admin { get; set; }
+        public DbSet<Request> Requests { get; set; }
+        public DbSet<RequestType> RequestTypes { get; set; }
 
         //ADMINISTRATOR
         public DbSet<HealthCenterEmployee> HealthCenterEmployees { get; set; }
@@ -26,6 +29,12 @@ namespace IS_ZJZ_B.Context
 
             //ADMINISTRATOR
             modelBuilder.Entity<HealthCenterEmployee>().ToTable("healthcenteremployee");
+
+            //Korisnik
+            modelBuilder.Entity<healthcards>().ToTable("healthcards");
+            modelBuilder.Entity<Request>().ToTable("requests");
+            modelBuilder.Entity<RequestType>().ToTable("requesttype");
+
         }
     }
 }

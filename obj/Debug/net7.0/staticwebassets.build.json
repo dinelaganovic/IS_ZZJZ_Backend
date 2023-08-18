@@ -1,11 +1,19 @@
 {
   "Version": 1,
-  "Hash": "t2f7ynxd+EDtFAlgQPTd9EUKJ+fvFtMBzENrCriNMEA=",
+  "Hash": "02+Kwr/qTSfRA4CL3H5SI+8+ArV0NXMyvOQRxZzTUV8=",
   "Source": "IS_ZJZ_B",
   "BasePath": "_content/IS_ZJZ_B",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "IS_ZJZ_B\\wwwroot",
+      "Source": "IS_ZJZ_B",
+      "ContentRoot": "C:\\Users\\PC\\OneDrive\\Radna površina\\IS_ZJZ\\ZZJZ_B\\IS_ZJZ_B\\IS_ZJZ_B\\wwwroot\\",
+      "BasePath": "_content/IS_ZJZ_B",
+      "Pattern": "**"
+    }
+  ],
   "Assets": []
 }

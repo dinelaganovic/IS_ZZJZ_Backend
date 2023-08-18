@@ -16,6 +16,7 @@ namespace IS_ZJZ_B.Models
         public string date { get; set; }
         public string place { get; set; }
         public string status { get; set; }
+        public string Role { get; set; }
         public string Token { get; set; }
 
     }

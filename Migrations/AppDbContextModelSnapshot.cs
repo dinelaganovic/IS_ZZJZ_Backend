@@ -29,6 +29,9 @@ namespace IS_ZJZ_B.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
+                    b.Property<string>("Role")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Token")
                         .HasColumnType("nvarchar(max)");
 
@@ -50,6 +53,9 @@ namespace IS_ZJZ_B.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<string>("Role")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Token")
                         .HasColumnType("nvarchar(max)");
@@ -93,6 +99,44 @@ namespace IS_ZJZ_B.Migrations
                     b.ToTable("healthcenteremployee", (string)null);
                 });
 
+            modelBuilder.Entity("IS_ZJZ_B.Models.Request", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<string>("document")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("type_id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("userid")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.ToTable("requests", (string)null);
+                });
+
+            modelBuilder.Entity("IS_ZJZ_B.Models.RequestType", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<string>("tipzahteva")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("requesttype", (string)null);
+                });
+
             modelBuilder.Entity("IS_ZJZ_B.Models.User", b =>
                 {
                     b.Property<int>("id")
@@ -100,6 +144,9 @@ namespace IS_ZJZ_B.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<string>("Role")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Token")
                         .HasColumnType("nvarchar(max)");
@@ -134,6 +181,31 @@ namespace IS_ZJZ_B.Migrations
                     b.HasKey("id");
 
                     b.ToTable("users", (string)null);
+                });
+
+            modelBuilder.Entity("IS_ZJZ_B.Models.healthcards", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<string>("date_expiration_hc")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("date_verification_hc")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("lbo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("user_id")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.ToTable("healthcards", (string)null);
                 });
 #pragma warning restore 612, 618
         }
